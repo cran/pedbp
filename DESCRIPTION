@@ -1,6 +1,6 @@
 Package: pedbp
 Title: Pediatric Blood Pressure
-Version: 1.0.2
+Version: 2.0.0
 Authors@R: c(
     person(given = "Peter", family = "DeWitt",  email = "peter.dewitt@cuanschutz.edu",        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6391-0795")),
     person(given = "Blake", family = "Martin",  email = "blake.martin@childrenscolorado.org", role = c("ctb"),        comment = c(ORCID = "0000-0001-5683-8310")),
@@ -22,20 +22,23 @@ Description: Data and utilities for estimating pediatric blood pressure
 Depends: R (>= 3.5.0)
 License: GPL-2
 Encoding: UTF-8
-URL: https://github.com/dewittpe/pedbp/
+URL: https://github.com/dewittpe/pedbp/,
+        http://www.peteredewitt.com/pedbp/
+BugReports: https://github.com/dewittpe/pedbp/issues/
 Language: en-us
 LazyData: true
-Imports: ggplot2, scales
-Suggests: covr, data.table, DT, gridExtra, knitr, rmarkdown, shiny,
-        shinydashboard
+Imports: ggplot2, Rcpp (>= 1.0.11), scales
+Suggests: covr, data.table, DT, digest, ggpubr, gridExtra, knitr, png,
+        qwraps2 (>= 0.6.0), rmarkdown, shiny, shinydashboard
+LinkingTo: Rcpp (>= 1.0.11), RcppArmadillo
 VignetteBuilder: knitr
-RoxygenNote: 7.2.2
-NeedsCompilation: no
-Packaged: 2022-11-23 21:59:02 UTC; peterdewitt
+RoxygenNote: 7.3.1
+NeedsCompilation: yes
+Packaged: 2024-04-23 21:46:42 UTC; peterdewitt
 Author: Peter DeWitt [aut, cre] (<https://orcid.org/0000-0002-6391-0795>),
   Blake Martin [ctb] (<https://orcid.org/0000-0001-5683-8310>),
   David Albers [ctb] (<https://orcid.org/0000-0002-5369-526X>),
   Tell Bennett [ctb] (<https://orcid.org/0000-0003-1483-4236>)
 Maintainer: Peter DeWitt <peter.dewitt@cuanschutz.edu>
 Repository: CRAN
-Date/Publication: 2022-11-23 22:20:02 UTC
+Date/Publication: 2024-04-23 22:10:06 UTC

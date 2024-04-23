@@ -14,17 +14,17 @@ est_norm(q, p, weights = rep(1, length(p)), ...)
 \item{weights}{relative weight of each quantile.  The higher the weight the
 better the approximated distribution will be at fitting that quantile.}
 
-\item{...}{passed to \code{\link[stats]{optim}}.}
+\item{...}{additional arguments passed to \code{\link[stats]{optim}}. See
+Details.}
 }
 \value{
 a \code{pedbp_est_norm} object.  This is a list with elements:
 \itemize{
-  \item{par}{a named numeric vector with the mean and standard deviation for a Gaussian distribution}
-  \item{qp}{a numeric matrix with two columns built from the input values of
-  \code{q} and \code{p}}
-  \item{weights}{the \code{weights} used}
-  \item{call}{The call made}
-  \item{optim}{result from calling \code{\link[stats]{optim}}}
+  \item par: a named numeric vector with the mean and standard deviation for a Gaussian distribution
+  \item qp: a numeric matrix with two columns built from the input values of \code{q} and \code{p}
+  \item weights: the \code{weights} used
+  \item call: The call made
+  \item optim: result from calling \code{\link[stats]{optim}}
 }
 }
 \description{
@@ -35,8 +35,9 @@ normal distribution to match up with empirical values provided.
 For X ~ N(mu, sigma), Pr[X <= q] = p
 
 Given the set of quantiles and probabilities, \code{est_norm} uses
-\code{\link[stats]{optim}} to find the preferable mean and standard deviation
-of a normal distribution to fit the provided quantiles.
+\code{\link[stats]{optim}} (with \code{method = "L-BFGS-B"}, \code{lower =
+c(-Inf, 0)}, \code{upper = c(Inf, Inf)}) to find the preferable mean and
+standard deviation of a normal distribution to fit the provided quantiles.
 
 Use the \code{weight} argument to emphasize which, if any, of the provided
 quantiles needs to be approximated closer than others.  By default all the
