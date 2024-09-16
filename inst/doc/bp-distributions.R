@@ -18,7 +18,7 @@ percentile_factor <- function(p) {
 library(pedbp)
 
 ## ----echo = FALSE, results = "asis"-------------------------------------------
-knitr::include_graphics("../man/figures/flowchart.png")
+knitr::include_graphics(system.file("images", "flowchart.png", package = "pedbp"))
 
 ## -----------------------------------------------------------------------------
 p_bp(q_sbp = 100, q_dbp = 60, age = 44, male = 1)
