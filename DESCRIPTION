@@ -1,6 +1,6 @@
 Package: pedbp
 Title: Pediatric Blood Pressure
-Version: 2.0.1
+Version: 2.0.2
 Authors@R: c(
     person(given = "Peter", family = "DeWitt",  email = "peter.dewitt@cuanschutz.edu",        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6391-0795")),
     person(given = "Blake", family = "Martin",  email = "blake.martin@childrenscolorado.org", role = c("ctb"),        comment = c(ORCID = "0000-0001-5683-8310")),
@@ -35,11 +35,11 @@ LinkingTo: Rcpp (>= 1.0.11), RcppArmadillo
 VignetteBuilder: knitr
 RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2024-09-16 14:48:23 UTC; peterdewitt
+Packaged: 2025-01-07 20:16:14 UTC; peterdewitt
 Author: Peter DeWitt [aut, cre] (<https://orcid.org/0000-0002-6391-0795>),
   Blake Martin [ctb] (<https://orcid.org/0000-0001-5683-8310>),
   David Albers [ctb] (<https://orcid.org/0000-0002-5369-526X>),
   Tell Bennett [ctb] (<https://orcid.org/0000-0003-1483-4236>)
 Maintainer: Peter DeWitt <peter.dewitt@cuanschutz.edu>
 Repository: CRAN
-Date/Publication: 2024-09-16 18:30:02 UTC
+Date/Publication: 2025-01-07 20:40:01 UTC
