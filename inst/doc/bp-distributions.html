@@ -48,8 +48,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -60,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -474,16 +475,16 @@ using the <code>lo2013</code> source.</p>
 <p>Those percentiles would be modified if height was 103 cm:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">p_bp</span>(<span class="at">q_sbp =</span> <span class="dv">100</span>, <span class="at">q_dbp =</span> <span class="dv">60</span>, <span class="at">age =</span> <span class="dv">44</span>, <span class="at">male =</span> <span class="dv">1</span>, <span class="at">height =</span> <span class="dv">103</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="do">## $sbp_p</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">## [1] 0.9000536</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="do">## [1] 0.7434636</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="do">## $dbp_p</span></span>
-<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## [1] 0.9152593</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="do">## [1] 0.8678361</span></span>
 <span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="fu">p_bp</span>(<span class="at">q_sbp =</span> <span class="dv">100</span>, <span class="at">q_dbp =</span> <span class="dv">60</span>, <span class="at">age =</span> <span class="dv">44</span>, <span class="at">male =</span> <span class="dv">1</span>, <span class="at">height =</span> <span class="dv">103</span>, <span class="at">source =</span> <span class="st">&quot;nhlbi&quot;</span>)</span>
 <span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="do">## $sbp_p</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## [1] 0.9000536</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="do">## [1] 0.7434636</span></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="do">## $dbp_p</span></span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## [1] 0.9152593</span></span></code></pre></div>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="do">## [1] 0.8678361</span></span></code></pre></div>
 <p>If you don’t have the height, but you do have the height percentiles
 you can use that instead:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">p_height_for_age</span>(<span class="dv">103</span>, <span class="at">male =</span> <span class="dv">1</span>, <span class="at">age =</span> <span class="dv">44</span>)</span>
@@ -578,24 +579,24 @@ argument to be length 1 or all the same length.</p>
 <span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a>       )</span>
 <span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a>bp_percentiles</span>
 <span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="do">## $sbp_p</span></span>
-<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="do">## [1] 0.5533069 0.8480961 0.2622697 0.6195685 0.8200583</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="do">## [1] 0.5533069 0.7680539 0.2622697 0.6195685 0.6101919</span></span>
 <span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="do">## </span></span>
 <span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="do">## $dbp_p</span></span>
-<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="do">## [1] 0.4120704        NA 0.1356661 0.8028518 0.9389043</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="do">## [1] 0.4120704        NA 0.1356661 0.8028518 0.9011250</span></span>
 <span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a></span>
 <span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="fu">str</span>(bp_percentiles)</span>
 <span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="do">## List of 2</span></span>
-<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="do">##  $ sbp_p: num [1:5] 0.553 0.848 0.262 0.62 0.82</span></span>
-<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="do">##  $ dbp_p: num [1:5] 0.412 NA 0.136 0.803 0.939</span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="do">##  $ sbp_p: num [1:5] 0.553 0.768 0.262 0.62 0.61</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="do">##  $ dbp_p: num [1:5] 0.412 NA 0.136 0.803 0.901</span></span>
 <span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="do">##  - attr(*, &quot;bp_params&quot;)=&#39;data.frame&#39;:    5 obs. of  8 variables:</span></span>
 <span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="do">##   ..$ source           : chr [1:5] &quot;lo2013&quot; &quot;nhlbi&quot; &quot;gemelli1990&quot; &quot;lo2013&quot; ...</span></span>
 <span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="do">##   ..$ male             : int [1:5] 1 0 0 1 1</span></span>
 <span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="do">##   ..$ age              : num [1:5] 96 144 3 36 36</span></span>
-<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="do">##   ..$ sbp_mean         : num [1:5] 100.7 102 89 93.2 86</span></span>
-<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="do">##   ..$ sbp_sd           : num [1:5] 9.7 10.7 11 9.2 10.9</span></span>
-<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="do">##   ..$ dbp_mean         : num [1:5] 59.8 61 54 55.1 44</span></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="do">##   ..$ sbp_mean         : num [1:5] 100.7 105 89 93.2 93</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="do">##   ..$ sbp_sd           : num [1:5] 9.7 10.9 11 9.2 10.7</span></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="do">##   ..$ dbp_mean         : num [1:5] 59.8 62 54 55.1 47</span></span>
 <span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="do">##   ..$ dbp_sd           : num [1:5] 8.1 10.9 10 8.1 11.6</span></span>
-<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="do">##   ..$ height_percentile: num [1:5] NA 5 NA NA 5</span></span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="do">##   ..$ height_percentile: num [1:5] NA 50 NA NA 75</span></span>
 <span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="do">##  - attr(*, &quot;class&quot;)= chr [1:2] &quot;pedbp_bp&quot; &quot;pedbp_p_bp&quot;</span></span></code></pre></div>
 <p>Going from percentiles back to quantiles:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">q_bp</span>(</span>
