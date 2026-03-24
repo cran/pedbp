@@ -91,7 +91,7 @@ calls to these functions will use the same source.
 Options:
 \itemize{
   \item \code{martin2022} (default) uses a combination of references to generate
-  distribution values for ages 1 months through 18 years, without or without known
+  distribution values for ages 1 month through 18 years, with or without known
   stature.  This was the only method implemented in version 1 of the pedbp package.
 
   \item \code{gemelli1990} uses only the reference values from Gemelli et al.
@@ -105,12 +105,12 @@ Options:
   \item \code{nhlbi} uses only reference values from the National Heart,
   Lung, and Blood Institute [NHLBI] and the Centers for Disease Control and
   Prevention [CDC] published in 2011.  These are for patients of at least one
-  year of age and with a known stature.  These values were publish
+  year of age and with a known stature. These values were published in 2011.
 
   \item \code{flynn2017} uses only reference values from Flynn et al. (2017).
-  These values are similar to the nhlbi values _but_ "do not include children
+  These values are similar to the nhlbi values but "do not include children
   and adolescents with overweight and obesity (ie, those with a BMI >= 85th
-  percentile).
+  percentile)."
 }
 
 There is a hierarchy for the use of the \code{height},
@@ -141,11 +141,11 @@ str(x)
 
 #############################################################################
 # compare results when height is known or unknown
-p_bp(q_sbp = rep(100, 2),
-     q_dbp = rep( 60, 2),
-     age   = rep(35.75, 2),
-     male  = c(0, 0),
-     height = c(NA, 100))
+p_bp(q_sbp = rep(100, 2),   # mmHg
+     q_dbp = rep( 60, 2),   # mmHg
+     age   = rep(35.75, 2), # months
+     male  = c(0, 0),       # female
+     height = c(NA, 100))   # centimeters
 
 #############################################################################
 # Working with multiple patients records
@@ -181,26 +181,26 @@ q_bp(
 # Selecting different source values
 
 # default
-p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
      source = "martin2022")
-p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
      source = "gemelli1990")
-p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
      source = "lo2013")
-p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
      source = "nhlbi")
-p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
      source = "flynn2017")
 
-q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
      source = "martin2022") # default
-q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
      source = "gemelli1990")
-q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
      source = "lo2013")
-q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
      source = "nhlbi")
-q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
      source = "flynn2017")
 
 
@@ -228,6 +228,10 @@ Flynn, Joseph T., David C. Kaelber, Carissa M. Baker-Smith, Douglas Blowey,
 Aaron E. Carroll, Stephen R. Daniels, Sarah D. De Ferranti et al. "Clinical
 practice guideline for screening and management of high blood pressure in
 children and adolescents." Pediatrics 140, no. 3 (2017).
+
+Height percentiles are expressed in percentile points on a 0 to 100 scale.
+For example, use \code{95} for the 95th percentile. Values such as
+\code{0.95} are treated as the 0.95th percentile, not the 95th percentile.
 }
 \seealso{
 \code{vignette("bp-distributions", package = "pedbp")},

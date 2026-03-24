@@ -35,7 +35,7 @@ server <- function(input, output, session) {
                                   input$bp_height_inch * 2.54,
                                   NA_real_)),
            height_percentile = ifelse(input$bp_height_status == "Known (percentile)",
-                                      input$bp_height_percentile / 100, NA_real_)
+                                      input$bp_height_percentile, NA_real_)
       )
 
     if (input$bp_sbp_status == "mmHg" & input$bp_dbp_status == "mmHg") {
@@ -46,9 +46,9 @@ server <- function(input, output, session) {
       x <- eval(as.call(cl))
 
       rtn <- list(sbp_mmHg = input$bp_sbp_mmHg,
-                  sbp_p = x$sbp_p,
+                  sbp_p = x[["sbp_p"]],
                   dbp_mmHg = input$bp_dbp_mmHg,
-                  dbp_p = x$dbp_p,
+                  dbp_p = x[["dbp_p"]],
                   bp_params = attr(x, "bp_params"))
 
       print(rtn)
@@ -67,8 +67,8 @@ server <- function(input, output, session) {
       dcl <- eval(as.call(dcl))
 
       rtn <- list(sbp_mmHg = input$bp_sbp_mmHg,
-                  sbp_p = scl$sbp_p,
-                  dbp_mmHg = dcl$dbp,
+                  sbp_p = scl[["sbp_p"]],
+                  dbp_mmHg = dcl[["dbp"]],
                   dbp_p = input$bp_dbp_percentile / 100,
                   bp_params = attr(scl, "bp_params")
                      )
@@ -86,10 +86,10 @@ server <- function(input, output, session) {
       scl <- eval(as.call(scl))
       dcl <- eval(as.call(dcl))
 
-      rtn <- list(sbp_mmHg = scl$sbp,
+      rtn <- list(sbp_mmHg = scl[["sbp"]],
                      sbp_p = input$bp_sbp_percentile / 100,
                      dbp_mmHg = input$bp_dbp_mmHg,
-                     dbp_p = dcl$dbp_p,
+                     dbp_p = dcl[["dbp_p"]],
                      bp_params = attr(scl, "bp_params")
                      )
 
@@ -100,30 +100,30 @@ server <- function(input, output, session) {
       cl <- c(cl, other_args)
       x <- eval(as.call(cl))
 
-      rtn <- list(sbp_mmHg = x$sbp,
+      rtn <- list(sbp_mmHg = x[["sbp"]],
                      sbp_p = input$bp_sbp_percentile / 100,
-                     dbp_mmHg = x$dbp,
-                     dbp_percentile = input$bp_dbp_percentile / 100,
+                     dbp_mmHg = x[["dbp"]],
+                     dbp_p = input$bp_dbp_percentile / 100,
                      bp_params = attr(x, "bp_params"))
     }
 
-    od <- data.frame(mmHg = c(rtn$sbp_mmHg, rtn$dbp_mmHg),
+    od <- data.frame(mmHg = c(rtn[["sbp_mmHg"]], rtn[["dbp_mmHg"]]),
                      bp   = gl(n = 2, k = 1, labels = c("Systolic", "Diastolic")),
-                     p    = c(rtn$sbp_p, rtn$dbp_percentile))
+                     p    = c(rtn[["sbp_p"]], rtn[["dbp_p"]]))
     dseg <-
       data.frame(
           bp   = gl(n = 2, k = 2, labels = c('Systolic', 'Diastolic')),
-          p    = c(rtn$sbp_p, rtn$sbp_p, rtn$dbp_p, rtn$dbp_p),
-          pend = c(rtn$sbp_p, -Inf, rtn$dbp_p, -Inf),
-          mmHg = c(-Inf, rtn$sbp_mmHg, -Inf, rtn$dbp_mmHg),
-          mmHgend = c(rtn$sbp_mmHg, rtn$sbp_mmHg, rtn$dbp_mmHg, rtn$dbp_mmHg)
+          p    = c(rtn[["sbp_p"]], rtn[["sbp_p"]], rtn[["dbp_p"]], rtn[["dbp_p"]]),
+          pend = c(rtn[["sbp_p"]], -Inf, rtn[["dbp_p"]], -Inf),
+          mmHg = c(-Inf, rtn[["sbp_mmHg"]], -Inf, rtn[["dbp_mmHg"]]),
+          mmHgend = c(rtn[["sbp_mmHg"]], rtn[["sbp_mmHg"]], rtn[["dbp_mmHg"]], rtn[["dbp_mmHg"]])
     )
 
-    rtn$plot <- pedbp:::bpcdfplot(od, dseg, rtn$bp_params)
+    rtn[["plot"]] <- pedbp:::bpcdfplot(od, dseg, rtn[["bp_params"]])
 
-    od2 <- data.frame(age = other_args$age, bp = factor(c("Systolic", "Diastolic"), levels = c("Systolic", "Diastolic")), male = other_args$male, mmHg = od$mmHg)
+    od2 <- data.frame(age = other_args[["age"]], bp = factor(c("Systolic", "Diastolic"), levels = c("Systolic", "Diastolic")), male = other_args[["male"]], mmHg = od[["mmHg"]])
 
-    rtn$bp_chart <-
+    rtn[["bp_chart"]] <-
       do.call(bp_chart, c(other_args[c("male", "height", "height_percentile", "source")], list(p = c(0.05, 0.25, 0.5, 0.75, 0.95)))
               ) +
       ggplot2::geom_point(data = od2, mapping = ggplot2::aes(x = age, y = mmHg))
@@ -131,22 +131,22 @@ server <- function(input, output, session) {
   })
 
   output$bp_chart <- renderPlot({
-    bp()$bp_chart
+    bp()[["bp_chart"]]
   })
 
   output$bp_cdf <- renderPlot({
-    bp()$plot
+    bp()[["plot"]]
   })
 
   output$bp_params <- renderTable({
-    bp()$bp_params
+    bp()[["bp_params"]]
   })
 
   output$bp_mmHg_percentile <- renderTable({
     x <- bp()
     data.table("bp" = c("Systolic", "Diastolic"),
-               "mmHg" = c(x$sbp_mmHg, x$dbp_mmHg),
-               "%itle" = 100*c(x$sbp_p, x$dbp_p))
+               "mmHg" = c(x[["sbp_mmHg"]], x[["dbp_mmHg"]]),
+               "%itle" = 100*c(x[["sbp_p"]], x[["dbp_p"]]))
   })
 
   ##############################################################################
@@ -154,10 +154,12 @@ server <- function(input, output, session) {
 
   gs_male <- reactive({as.integer(input$gs_sex == "Male")})
   gs_age  <- reactive({
+    # pedbp growth-standard helpers expect age in months, regardless of how the
+    # user enters age in the UI, so normalize days and years before calling them.
     switch(input$gs_age_units,
-           "days"   = input$gs_age_days * 365.25 / 12,
+           "days"   = input$gs_age_days * 12 / 365.25,
            "months" = input$gs_age_months,
-           "years"  = input$gs_age_years / 12)
+           "years"  = input$gs_age_years * 12)
   })
   gs_stature <- reactive({
     if (grepl("Height", input$gs_stature_units)) {
@@ -190,6 +192,41 @@ server <- function(input, output, session) {
       }
     } else {
       stop("Unknown input$gs_standard")
+    }
+  })
+
+  observe({
+    # Weight-for-stature charts are only defined over the LMS support in pedbp,
+    # so tighten the stature sliders to the source-specific chartable domain.
+    if (input$gs_standard == "Weight for Stature") {
+      if (grepl("Height", input$gs_stature_units)) {
+        limits_cm <- switch(input$gs_source,
+                            "CDC" = c(77, 121.5),
+                            "WHO" = c(65, 120))
+        limits_in <- limits_cm / 2.54
+        updateSliderInput(session, "gs_stature_height_cm",
+                          min = limits_cm[1], max = limits_cm[2],
+                          value = min(max(input$gs_stature_height_cm, limits_cm[1]), limits_cm[2]))
+        updateSliderInput(session, "gs_stature_height_inches",
+                          min = floor(limits_in[1]), max = ceiling(limits_in[2]),
+                          value = min(max(input$gs_stature_height_inches, floor(limits_in[1])), ceiling(limits_in[2])))
+      } else {
+        limits_cm <- switch(input$gs_source,
+                            "CDC" = c(45, 103.5),
+                            "WHO" = c(45, 110))
+        limits_in <- limits_cm / 2.54
+        updateSliderInput(session, "gs_stature_length_cm",
+                          min = limits_cm[1], max = limits_cm[2],
+                          value = min(max(input$gs_stature_length_cm, limits_cm[1]), limits_cm[2]))
+        updateSliderInput(session, "gs_stature_length_inches",
+                          min = floor(limits_in[1]), max = ceiling(limits_in[2]),
+                          value = min(max(input$gs_stature_length_inches, floor(limits_in[1])), ceiling(limits_in[2])))
+      }
+    } else {
+      updateSliderInput(session, "gs_stature_height_cm", min = 0, max = 225)
+      updateSliderInput(session, "gs_stature_height_inches", min = 0, max = 100)
+      updateSliderInput(session, "gs_stature_length_cm", min = 0, max = 225)
+      updateSliderInput(session, "gs_stature_length_inches", min = 0, max = 100)
     }
   })
 
@@ -232,7 +269,7 @@ server <- function(input, output, session) {
       stop("Unknown gs_standard")
     }
 
-    obs_seg <- data.table(p = c(observed$p, observed$p, 0), q = c(-Inf, observed$q, observed$q))
+    obs_seg <- data.table(p = c(observed[["p"]], observed[["p"]], 0), q = c(-Inf, observed[["q"]], observed[["q"]]))
 
     cdf <- ggplot2::ggplot() +
       ggplot2::aes(x = q, y = p) +
@@ -243,9 +280,8 @@ server <- function(input, output, session) {
       ggplot2::xlab(qplabel)
 
     chart_point <- switch(input$gs_standard,
-                  "Weight for Height" = ggplot2::geom_point(x = gs_stature(), y = observed$q),
-                  "Weight for Length" = ggplot2::geom_point(x = gs_stature(), y = observed$q),
-                  ggplot2::geom_point(x = gs_age(), y = observed$q))
+                  "Weight for Stature" = ggplot2::geom_point(x = gs_stature(), y = observed[["q"]]),
+                  ggplot2::geom_point(x = gs_age(), y = observed[["q"]]))
 
     chart <- gs_chart(metric = gs_metric(), male = gs_male()) + chart_point
 
@@ -253,12 +289,12 @@ server <- function(input, output, session) {
 
   })
 
-  output$gs_cdf_plot <- renderPlot({ gs()$cdf })
-  output$gs_chart_plot <- renderPlot({ gs()$chart })
+  output$gs_cdf_plot <- renderPlot({ gs()[["cdf"]] })
+  output$gs_chart_plot <- renderPlot({ gs()[["chart"]] })
   output$gs_cdf_table <- renderTable({
-    DT <- data.table::copy(gs()$observed)
+    DT <- data.table::copy(gs()[["observed"]])
     DT[, p := paste0(qwraps2::frmt(p*100, digits = 1), "th")]
-    setnames(DT, old = c("q", "p"), new = c(gs()$qplabel, "%ile"))
+    setnames(DT, old = c("q", "p"), new = c(gs()[["qplabel"]], "%ile"))
     DT
   })
 
@@ -266,7 +302,7 @@ server <- function(input, output, session) {
   # Batch processing
 
   batch_data <- reactive({
-    data.table::fread(input$bpfile$datapath)
+    data.table::fread(input$bpfile[["datapath"]])
   })
 
   batch_method <- reactive({
@@ -288,12 +324,12 @@ server <- function(input, output, session) {
 
     map <- list()
 
-    if ("q_sbp" %in% data_names) {
-      map$q_sbp <- "q_sbp"
-    } else if (length(i <- grep("^sbp", data_names)) > 0) {
-      map$q_sbp <- data_names[min(i)]
+    if ("p_sbp" %in% data_names) {
+      map$p_sbp <- "p_sbp"
+    } else if (length(i <- grep("^p_sbp|^sbp_p|^sbp_percentile", data_names)) > 0) {
+      map$p_sbp <- data_names[min(i)]
     } else {
-      map$q_sbp <- "_ignore_"
+      map$p_sbp <- "_ignore_"
     }
 
     if ("q_sbp" %in% data_names) {
@@ -304,12 +340,12 @@ server <- function(input, output, session) {
       map$q_sbp <- "_ignore_"
     }
 
-    if ("q_dbp" %in% data_names) {
-      map$q_dbp <- "q_dbp"
-    } else if (length(i <- grep("^dbp", data_names)) > 0) {
-      map$q_dbp <- data_names[min(i)]
+    if ("p_dbp" %in% data_names) {
+      map$p_dbp <- "p_dbp"
+    } else if (length(i <- grep("^p_dbp|^dbp_p|^dbp_percentile", data_names)) > 0) {
+      map$p_dbp <- data_names[min(i)]
     } else {
-      map$q_dbp <- "_ignore_"
+      map$p_dbp <- "_ignore_"
     }
 
     if ("q_dbp" %in% data_names) {
@@ -553,11 +589,11 @@ server <- function(input, output, session) {
 
       results <- eval(as.call(cl))
       if (batch_method() == "p_bp") {
-        d[, pedbp_sbp_p := results$sbp_p]
-        d[, pedbp_dbp_p := results$dbp_p]
+        d[, pedbp_sbp_p := results[["sbp_p"]]]
+        d[, pedbp_dbp_p := results[["dbp_p"]]]
       } else {
-        d[, pedbp_sbp_z := results$sbp_z]
-        d[, pedbp_dbp_z := results$dbp_z]
+        d[, pedbp_sbp_z := results[["sbp_z"]]]
+        d[, pedbp_dbp_z := results[["dbp_z"]]]
       }
 
     } else if (batch_method() == "q_bp") {
@@ -583,8 +619,8 @@ server <- function(input, output, session) {
       }
 
       results <- eval(as.call(cl))
-      d[, pedbp_sbp_mmHg := results$sbp]
-      d[, pedbp_dbp_mmHg := results$dbp]
+      d[, pedbp_sbp_mmHg := results[["sbp"]]]
+      d[, pedbp_dbp_mmHg := results[["dbp"]]]
 
     } else if (grepl("^p_", batch_method()) | grepl("^z_", batch_method())) {
       if (input$batch_q == "_ignore_") {
@@ -627,7 +663,7 @@ server <- function(input, output, session) {
 #
 #  batch_results <- reactive({
 #    req(input$bpfile)
-#    d <- data.table::fread(input$bpfile$datapath)
+#    d <- data.table::fread(input$bpfile[["datapath"]])
 #    names(d) <- c("pid", "age_months", "male", "height_cm", "sbp_mmHg", "dbp_mmHg")
 #    d <- d[
 #           , as.list(p_bp(sbp_mmHg, dbp_mmHg, age_months, male, height_cm))
@@ -638,7 +674,7 @@ server <- function(input, output, session) {
 #
 #
   output$download_batch_results <- downloadHandler(
-    filename = function() {paste0(input$bpfile, "_with_percentiles.csv")},
+    filename = function() {paste0(input$bpfile[["name"]], "_with_percentiles.csv")},
     content  = function(file) {
       data.table::fwrite(batch_results(), file)
     }
@@ -648,8 +684,8 @@ server <- function(input, output, session) {
 #  bp <- reactive({
 #    bp <- p_bp(input$sbp, input$dbp, age = input$age_mo, male = input$sex,
 #               height = ifelse(input$height_known == 0, NA, input$height_cm))
-#    bp$sbp_p <- paste0(round(bp$sbp_p * 100, 2), " percentile")
-#    bp$dbp_percentile <- paste0(round(bp$dbp_percentile * 100, 2), " percentile")
+#    bp[["sbp_p"]] <- paste0(round(bp[["sbp_p"]] * 100, 2), " percentile")
+#    bp[["dbp_p"]] <- paste0(round(bp[["dbp_p"]] * 100, 2), " percentile")
 #    bp
 #  })
 #
@@ -680,7 +716,7 @@ server <- function(input, output, session) {
 #                      ifelse(input$height_known == 0, "", paste0("(", (input$height_cm * 0.393701) %/% 12, "' ", round((input$height_cm * 0.393701) %% 12, 1), "'')")),
 #                      "",
 #                      ""),
-#               V4 = c("", "", hp, bp()$sbp_p, bp()$dbp_percentile)
+#               V4 = c("", "", hp, bp()[["sbp_p"]], bp()[["dbp_p"]])
 #               )
 #  }
 #  , colnames = FALSE
@@ -688,6 +724,3 @@ server <- function(input, output, session) {
 #
 #  })
 }
-
-
-

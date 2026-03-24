@@ -1,6 +1,6 @@
 Package: pedbp
 Title: Pediatric Blood Pressure
-Version: 2.0.3
+Version: 2.1.0
 Authors@R: c(
     person(given = "Peter", family = "DeWitt",  email = "peter.dewitt@cuanschutz.edu",        role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6391-0795")),
     person(given = "Blake", family = "Martin",  email = "blake.martin@childrenscolorado.org", role = c("ctb"),        comment = c(ORCID = "0000-0001-5683-8310")),
@@ -9,15 +9,14 @@ Authors@R: c(
     )
 Description: Data and utilities for estimating pediatric blood pressure
     percentiles by sex, age, and optionally height (stature) as described in
-    Martin et.al. (2022) <doi:10.1001/jamanetworkopen.2022.36918>.
+    Martin et al. (2022) <doi:10.1001/jamanetworkopen.2022.36918>.
     Blood pressure percentiles for children under one year of age come from Gemelli
-    et.al. (1990) <doi:10.1007/BF02171556>.  Estimates of blood pressure
+    et al. (1990) <doi:10.1007/BF02171556>.  Estimates of blood pressure
     percentiles for children at least one year of age are informed by
     data from the National Heart, Lung, and Blood Institute (NHLBI) and the
     Centers for Disease Control and Prevention (CDC)
-    <doi:10.1542/peds.2009-2107C> or from Lo et.al. (2013)
-    <doi:10.1542/peds.2012-1292>.  The flowchart for selecting the informing
-    data source comes from Martin et.al. (2022)
+    <doi:10.1542/peds.2009-2107C> or from Lo et al. (2013)
+    <doi:10.1542/peds.2012-1292>.  The source-selection flowchart comes from Martin et al. (2022)
     <doi:10.1542/hpeds.2021-005998>.
 Depends: R (>= 3.5.0)
 License: GPL-2
@@ -33,9 +32,9 @@ Suggests: covr, data.table, DT, digest, ggpubr, gridExtra, knitr,
         shinydashboard
 LinkingTo: Rcpp (>= 1.0.11), RcppArmadillo
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 NeedsCompilation: yes
-Packaged: 2025-06-12 01:10:04 UTC; peterdewitt
+Packaged: 2026-03-24 02:10:55 UTC; peterdewitt
 Author: Peter DeWitt [aut, cre] (ORCID:
     <https://orcid.org/0000-0002-6391-0795>),
   Blake Martin [ctb] (ORCID: <https://orcid.org/0000-0001-5683-8310>),
@@ -43,4 +42,4 @@ Author: Peter DeWitt [aut, cre] (ORCID:
   Tell Bennett [ctb] (ORCID: <https://orcid.org/0000-0003-1483-4236>)
 Maintainer: Peter DeWitt <peter.dewitt@cuanschutz.edu>
 Repository: CRAN
-Date/Publication: 2025-06-12 04:10:02 UTC
+Date/Publication: 2026-03-24 03:20:02 UTC

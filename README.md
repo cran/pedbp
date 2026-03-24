@@ -70,6 +70,15 @@ values for the mean and standard deviation, or derived mean and standard
 deviations based on published percentiles.  Growth standards are based on LMS
 approximations.  All the methods get parameters based on lookup tables.
 
+## Notation
+
+Throughout the package, arguments named `p` or beginning with `p_` are
+probabilities on the 0 to 1 scale. Arguments or values named `percentile` are
+percentile points on the 0 to 100 scale.
+
+For example, use `p_sbp = 0.42` for the 42nd percentile as a probability
+input, and use `height_percentile = 90` for the 90th height percentile.
+
 ## Blood Pressure
 There are several data sources used to inform the blood pressure percentiles
 estimates:
@@ -108,7 +117,7 @@ You can also find the quantile values.  Example: what is the SBP/DBP values for
 the 42nd percentile of 13 year (156 month) old males in the 90th height percentile?
 
 ``` r
-q_bp(p_sbp = 0.42, p_dbp = 0.42, age = 156, male = 1, height_percentile = 0.90)
+q_bp(p_sbp = 0.42, p_dbp = 0.42, age = 156, male = 1, height_percentile = 90)
 ```
 
 More examples can be found in the vignette.
@@ -192,7 +201,7 @@ The shiny app is also live on [shinyapps.io](https://dewittpe.shinyapps.io/pedbp
 
 * Gemelli, M, R Manganaro, C Mami, and F De Luca. 1990. “Longitudinal Study of Blood Pressure During the 1st Year of Life.” European Journal of Pediatrics 149 (5): 318–20.
 
-* Lo, Joan C, Alan Sinaiko, Malini Chandra, Matthew F Daley, Louise C Greenspan, Emily D Parker, Elyse O Kharbanda, et.al. 2013. “Prehypertension and Hypertension in Community-Based Pediatric Practice.” Pediatrics 131 (2): e415–24.
+* Lo, Joan C, Alan Sinaiko, Malini Chandra, Matthew F Daley, Louise C Greenspan, Emily D Parker, Elyse O Kharbanda, et al. 2013. “Prehypertension and Hypertension in Community-Based Pediatric Practice.” Pediatrics 131 (2): e415–24.
 
 * Martin, Blake, Peter E. DeWitt, Scout HF, SK Parker, and Tellen D. Bennett. 2022. “Machine Learning Approach to Predicting Absence of Serious Bacterial Infection at PICU Admission.” Hospital Pediatrics.
 

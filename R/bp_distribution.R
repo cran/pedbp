@@ -11,7 +11,7 @@
 #' Options:
 #' \itemize{
 #'   \item \code{martin2022} (default) uses a combination of references to generate
-#'   distribution values for ages 1 months through 18 years, without or without known
+#'   distribution values for ages 1 month through 18 years, with or without known
 #'   stature.  This was the only method implemented in version 1 of the pedbp package.
 #'
 #'   \item \code{gemelli1990} uses only the reference values from Gemelli et al.
@@ -25,12 +25,12 @@
 #'   \item \code{nhlbi} uses only reference values from the National Heart,
 #'   Lung, and Blood Institute [NHLBI] and the Centers for Disease Control and
 #'   Prevention [CDC] published in 2011.  These are for patients of at least one
-#'   year of age and with a known stature.  These values were publish
+#'   year of age and with a known stature. These values were published in 2011.
 #'
 #'   \item \code{flynn2017} uses only reference values from Flynn et al. (2017).
-#'   These values are similar to the nhlbi values _but_ "do not include children
+#'   These values are similar to the nhlbi values but "do not include children
 #'   and adolescents with overweight and obesity (ie, those with a BMI >= 85th
-#'   percentile).
+#'   percentile)."
 #' }
 #'
 #' There is a hierarchy for the use of the \code{height},
@@ -93,6 +93,10 @@
 #' practice guideline for screening and management of high blood pressure in
 #' children and adolescents." Pediatrics 140, no. 3 (2017).
 #'
+#' Height percentiles are expressed in percentile points on a 0 to 100 scale.
+#' For example, use \code{95} for the 95th percentile. Values such as
+#' \code{0.95} are treated as the 0.95th percentile, not the 95th percentile.
+#'
 #' @examples
 #'
 #' x <- p_bp(q_sbp = 100, q_dbp = 60, age = 8, male = 0)
@@ -113,11 +117,11 @@
 #'
 #' #############################################################################
 #' # compare results when height is known or unknown
-#' p_bp(q_sbp = rep(100, 2),
-#'      q_dbp = rep( 60, 2),
-#'      age   = rep(35.75, 2),
-#'      male  = c(0, 0),
-#'      height = c(NA, 100))
+#' p_bp(q_sbp = rep(100, 2),   # mmHg
+#'      q_dbp = rep( 60, 2),   # mmHg
+#'      age   = rep(35.75, 2), # months
+#'      male  = c(0, 0),       # female
+#'      height = c(NA, 100))   # centimeters
 #'
 #' #############################################################################
 #' # Working with multiple patients records
@@ -153,36 +157,60 @@
 #' # Selecting different source values
 #'
 #' # default
-#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "martin2022")
-#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "gemelli1990")
-#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "lo2013")
-#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "nhlbi")
-#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' p_bp(q_sbp = 92, q_dbp = 60, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "flynn2017")
 #'
-#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "martin2022") # default
-#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "gemelli1990")
-#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "lo2013")
-#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "nhlbi")
-#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 0.95,
+#' q_bp(p_sbp = 0.85, p_dbp = 0.85, age = 29.2, male = 0, default_height_percentile = 95,
 #'      source = "flynn2017")
 #'
 #'
 #' @name bp_distribution
 NULL
 
+warn_decimal_height_percentile <- function(height_percentile) {
+  if (length(height_percentile) == 0L || all(is.na(height_percentile))) {
+    return(invisible(height_percentile))
+  }
+
+  decimal_scale <-
+    !is.na(height_percentile) &
+    height_percentile > 0 &
+    height_percentile < 1
+
+  if (any(decimal_scale)) {
+    warning(
+      paste(
+        "'height_percentile' is expressed in percentile points on a 0-100 scale.",
+        "Values between 0 and 1 are treated literally, so 0.95 means the 0.95th percentile, not the 95th percentile."
+      ),
+      call. = FALSE
+    )
+  }
+
+  invisible(height_percentile)
+}
+
 #' @rdname bp_distribution
 #' @export
 p_bp <- function(q_sbp, q_dbp, age, male, height = NA, height_percentile = NA, default_height_percentile = 50, source = getOption("pedbp_bp_source", "martin2022"), ...) {
   stopifnot(!is.null(q_sbp) & !is.null(q_dbp))
+  warn_decimal_height_percentile(height_percentile)
   source <- match.arg(source, choices = c("martin2022", "gemelli1990", "nhlbi", "lo2013", "flynn2017"), several.ok = FALSE)
   rtn <- cppBP(qp_sbp = q_sbp, qp_dbp = q_dbp, age = age, male = male, height = height, height_percentile = height_percentile, default_height_percentile = default_height_percentile, source = source, type = "distribution")
   class(rtn) <- c("pedbp_bp", "pedbp_p_bp")
@@ -193,6 +221,7 @@ p_bp <- function(q_sbp, q_dbp, age, male, height = NA, height_percentile = NA, d
 #' @export
 q_bp <- function(p_sbp, p_dbp, age, male, height = NA, height_percentile = NA, default_height_percentile = 50, source = getOption("pedbp_bp_source", "martin2022"), ...) {
   stopifnot(!is.null(p_sbp) & !is.null(p_dbp))
+  warn_decimal_height_percentile(height_percentile)
   source <- match.arg(source, choices = c("martin2022", "gemelli1990", "nhlbi", "lo2013", "flynn2017"), several.ok = FALSE)
   rtn <- cppBP(qp_sbp = p_sbp, qp_dbp = p_dbp, age = age, male = male, height = height, height_percentile = height_percentile, default_height_percentile = default_height_percentile, source = source, type = "quantile")
   class(rtn) <- c("pedbp_bp", "pedbp_q_bp")
@@ -203,6 +232,7 @@ q_bp <- function(p_sbp, p_dbp, age, male, height = NA, height_percentile = NA, d
 #' @export
 z_bp <- function(q_sbp, q_dbp, age, male, height = NA, height_percentile = NA, default_height_percentile = 50, source = getOption("pedbp_bp_source", "martin2022"), ...) {
   stopifnot(!is.null(q_sbp) & !is.null(q_dbp))
+  warn_decimal_height_percentile(height_percentile)
   source <- match.arg(source, choices = c("martin2022", "gemelli1990", "nhlbi", "lo2013", "flynn2017"), several.ok = FALSE)
   rtn <- cppBP(qp_sbp = q_sbp, qp_dbp = q_dbp, age = age, male = male, height = height, height_percentile = height_percentile, default_height_percentile = default_height_percentile, source = source, type = "zscore")
   class(rtn) <- c("pedbp_bp", "pedbp_p_bp")
